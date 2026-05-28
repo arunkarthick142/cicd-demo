@@ -1,6 +1,9 @@
-
 pipeline {
     agent any
+
+    tools {
+        maven 'Maven3'
+    }
 
     environment {
         IMAGE_NAME = "cicddemo"
@@ -19,6 +22,7 @@ pipeline {
         stage('Build Maven Project') {
             steps {
                 echo 'Building Maven project...'
+
                 sh 'mvn clean package'
             }
         }
@@ -26,6 +30,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 echo 'Building Docker image...'
+
                 sh 'docker build -t $IMAGE_NAME .'
             }
         }
@@ -65,4 +70,3 @@ pipeline {
 
     }
 }
-
