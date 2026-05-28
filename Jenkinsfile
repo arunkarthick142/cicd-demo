@@ -19,14 +19,14 @@ pipeline {
         stage('Build Maven Project') {
             steps {
                 echo 'Building Maven project...'
-                bat 'mvn clean package'
+                sh 'mvn clean package'
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 echo 'Building Docker image...'
-                bat 'docker build -t %IMAGE_NAME% .'
+                sh 'docker build -t $IMAGE_NAME .'
             }
         }
 
@@ -34,9 +34,9 @@ pipeline {
             steps {
                 echo 'Stopping old container if running...'
 
-                bat '''
-                docker stop %CONTAINER_NAME% || exit 0
-                docker rm %CONTAINER_NAME% || exit 0
+                sh '''
+                docker stop $CONTAINER_NAME || true
+                docker rm $CONTAINER_NAME || true
                 '''
             }
         }
@@ -45,8 +45,8 @@ pipeline {
             steps {
                 echo 'Running Docker container...'
 
-                bat '''
-                docker run -d -p 8080:8080 --name %CONTAINER_NAME% %IMAGE_NAME%
+                sh '''
+                docker run -d -p 8081:8080 --name $CONTAINER_NAME $IMAGE_NAME
                 '''
             }
         }
